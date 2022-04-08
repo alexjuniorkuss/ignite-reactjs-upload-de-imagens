@@ -7,8 +7,29 @@ import { CardList } from '../components/CardList';
 import { api } from '../services/api';
 import { Loading } from '../components/Loading';
 import { Error } from '../components/Error';
+import { string } from 'yup';
+
+interface Image {
+  title: string;
+  description: string;
+  url: string;
+  ts: number;
+  id: string;
+}
+
+interface GetImagesResponse {
+  after: string;
+  data: Image[];
+}
 
 export default function Home(): JSX.Element {
+  async function fetchImages({ pageParam = null}): Promise<GetImagesResponse> {
+    const { data } = await api.get('/api/images', {
+      params: {
+        after: pageParam,
+      },
+    });
+  }
   const {
     data,
     isLoading,
